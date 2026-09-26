@@ -106,6 +106,143 @@ body {
   opacity: 0.7;
 }
 
+.sound {
+  position: fixed;
+  top: 18px;
+  right: 12px;
+  z-index: 1;
+  color: var(--ink-dim);
+}
+
+.sound[hidden] {
+  display: none;
+}
+
+.sound-toggle {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 400ms ease, color 400ms ease, filter 400ms ease;
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+  opacity: 1;
+  outline: none;
+}
+
+.sound-toggle:focus-visible {
+  outline: 1px solid var(--line-strong);
+}
+
+.sound-toggle .sound-waves,
+.sound-toggle[aria-pressed="true"] .sound-muted {
+  display: none;
+}
+
+.sound-toggle[aria-pressed="true"] .sound-waves {
+  display: inline;
+}
+
+.sound-toggle[aria-pressed="true"] {
+  color: var(--ink);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 6px var(--glow));
+}
+
+/* 音量バー：アイコンの下に現れる */
+.sound-panel {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 50%;
+  width: 32px;
+  height: 116px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(10, 10, 16, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -6px);
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease,
+    visibility 0s linear 300ms;
+}
+
+/* 音楽がオンの間だけ出す */
+.sound:has(.sound-toggle[aria-pressed="true"]) .sound-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition-delay: 0s;
+}
+
+/* 横向きのバーを回転させて縦に置く（上が大きい） */
+.sound-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 88px;
+  height: 24px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.sound-volume:focus-visible {
+  outline: none;
+}
+
+.sound-volume::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.sound-volume::-moz-range-track {
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.sound-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 9px;
+  height: 9px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.sound-volume::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.sound-volume:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--glow), 0 0 0 4px var(--line-strong);
+}
+
+.sound-volume:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--glow), 0 0 0 4px var(--line-strong);
+}
+
 .stage {
   width: 100%;
   max-width: calc(var(--stage-width) + 32px);
