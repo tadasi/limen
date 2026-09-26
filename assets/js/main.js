@@ -12,7 +12,7 @@
   };
 
   const STORIES_ROOT = "stories/";
-  const SELECT = "@select";
+  const ENDING_CHOICE_LABEL = "もう一度、目を閉じる";
 
   // ---- 物語データの登録口（stories/ 以下の JS から呼ばれる） ----
 
@@ -67,14 +67,65 @@
     return version;
   }
 
+  const validated = new Set();
+
   async function loadStory(versionId, protagonistId) {
     await loadScript(`${storyDir(versionId, protagonistId)}story.js`);
-    const story = registry.stories[`${versionId}/${protagonistId}`];
+    const key = `${versionId}/${protagonistId}`;
+    const story = registry.stories[key];
     if (!story) throw new Error(`主人公 "${protagonistId}" の物語が登録されていません`);
+    if (!validated.has(key)) {
+      validated.add(key);
+      validateStory(story).forEach((problem) => console.error(`limen: ${key}: ${problem}`));
+    }
     return story;
   }
 
-  // ---- ルーティング： #/<version>/<protagonist>/<scene> ----
+  // どの選択をたどっても必ず結末に行き着く（ループしない）ことを確かめる
+  function validateStory(story) {
+    const problems = [];
+    const ids = Object.keys(story.scenes);
+
+    if (!story.scenes[story.start]) problems.push(`開始場面 "${story.start}" がありません`);
+
+    ids.forEach((id) => {
+      const scene = story.scenes[id];
+      const choices = scene.choices || [];
+      if (scene.ending) {
+        if (choices.length) problems.push(`結末 "${id}" に choices は書けません`);
+        return;
+      }
+      if (!choices.length) problems.push(`"${id}" は結末ではないのに選択肢がありません`);
+      choices.forEach((choice) => {
+        if (!story.scenes[choice.next]) problems.push(`"${id}" の行き先 "${choice.next}" がありません`);
+      });
+    });
+
+    const state = {};
+    const reached = new Set();
+    (function visit(id, path) {
+      const scene = story.scenes[id];
+      if (!scene) return;
+      reached.add(id);
+      if (state[id] === "done") return;
+      if (state[id] === "visiting") {
+        problems.push(`ループしています: ${[...path, id].join(" → ")}`);
+        return;
+      }
+      state[id] = "visiting";
+      (scene.choices || []).forEach((choice) => visit(choice.next, [...path, id]));
+      state[id] = "done";
+    })(story.start, []);
+
+    ids
+      .filter((id) => !reached.has(id))
+      .forEach((id) => problems.push(`"${id}" にはどこからもたどり着けません`));
+
+    return problems;
+  }
+
+  // ---- 行き先： 指定がなければ主人公はランダム ----
+  // URL の #/<version>/<protagonist>/<scene> は、確認用に特定の場面を直接開くためのもの
 
   function parseRoute() {
     const [version, protagonist, scene] = decodeURIComponent(location.hash.replace(/^#\/?/, ""))
@@ -83,8 +134,8 @@
     return { version, protagonist, scene };
   }
 
-  function hashFor({ version, protagonist, scene }) {
-    return "#/" + [version, protagonist, scene].filter(Boolean).join("/");
+  function pickRandom(items) {
+    return items[Math.floor(Math.random() * items.length)];
   }
 
   async function resolveView(route) {
@@ -93,50 +144,32 @@
     const versionId = catalog.versions.includes(route.version) ? route.version : catalog.latest;
     const version = await loadVersion(versionId);
 
-    const protagonist = version.protagonists.find((p) => p.id === route.protagonist);
-    if (protagonist) {
-      const story = await loadStory(versionId, protagonist.id);
-      const sceneId = story.scenes[route.scene] ? route.scene : story.start;
-      const scene = story.scenes[sceneId];
-      const dir = storyDir(versionId, protagonist.id);
+    const protagonist =
+      version.protagonists.find((p) => p.id === route.protagonist) || pickRandom(version.protagonists);
+    const story = await loadStory(versionId, protagonist.id);
+    const sceneId = story.scenes[route.scene] ? route.scene : story.start;
+    const scene = story.scenes[sceneId];
+    const dir = storyDir(versionId, protagonist.id);
 
-      return {
-        route: { version: versionId, protagonist: protagonist.id, scene: sceneId },
-        version,
-        view: {
-          image: resolveAsset(dir, scene.image),
-          alt: scene.alt,
-          text: scene.text,
-          choices: scene.choices.map((choice) => ({
-            label: choice.label,
-            route:
-              choice.next === SELECT
-                ? { version: versionId }
-                : { version: versionId, protagonist: protagonist.id, scene: choice.next },
-          })),
-        },
-        preload: scene.choices
-          .map((choice) => story.scenes[choice.next])
-          .filter(Boolean)
-          .map((next) => resolveAsset(dir, next.image)),
-      };
-    }
+    const choices = scene.ending
+      ? [{ label: ENDING_CHOICE_LABEL, route: { version: versionId } }]
+      : scene.choices.map((choice) => ({
+          label: choice.label,
+          route: { version: versionId, protagonist: protagonist.id, scene: choice.next },
+        }));
 
-    const dir = versionDir(versionId);
     return {
-      route: { version: versionId },
       version,
       view: {
-        image: resolveAsset(dir, version.cover),
-        alt: version.coverAlt,
-        text: version.prologue,
-        choices: version.protagonists.map((p) => ({
-          label: p.name,
-          note: p.summary,
-          route: { version: versionId, protagonist: p.id },
-        })),
+        image: resolveAsset(dir, scene.image),
+        alt: scene.alt,
+        text: scene.text,
+        choices,
       },
-      preload: [],
+      preload: (scene.choices || [])
+        .map((choice) => story.scenes[choice.next])
+        .filter(Boolean)
+        .map((next) => resolveAsset(dir, next.image)),
     };
   }
 
@@ -153,7 +186,6 @@
 
   let renderToken = 0;
   let enableTimer = null;
-  let currentHash = null;
 
   function wait(ms) {
     return new Promise((resolve) => setTimeout(resolve, reducedMotion ? 0 : ms));
@@ -196,20 +228,8 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = "choice fx";
+      button.textContent = choice.label;
       button.style.setProperty("--delay", `${choicesStart + i * TIMING.choiceStagger}ms`);
-
-      const label = document.createElement("span");
-      label.className = "choice-label";
-      label.textContent = choice.label;
-      button.append(label);
-
-      if (choice.note) {
-        const note = document.createElement("span");
-        note.className = "choice-note";
-        note.textContent = choice.note;
-        button.append(note);
-      }
-
       button.addEventListener("click", () => navigate(choice.route));
       choices.append(button);
     });
@@ -220,18 +240,17 @@
   function errorView(error) {
     console.error(error);
     return {
-      route: null,
       version: null,
       view: {
         image: "",
         text: ["この夢には、まだ入ることができないようです。", error.message],
-        choices: [{ label: "はじめに戻る", route: {} }],
+        choices: [{ label: ENDING_CHOICE_LABEL, route: {} }],
       },
       preload: [],
     };
   }
 
-  async function render() {
+  async function render(route) {
     const token = ++renderToken;
     setChoicesEnabled(false);
 
@@ -239,7 +258,7 @@
     stage.classList.remove("is-shown", "is-instant");
 
     const [resolved] = await Promise.all([
-      resolveView(parseRoute()).catch(errorView),
+      resolveView(route).catch(errorView),
       leaving ? wait(TIMING.fadeOut) : null,
     ]);
     if (token !== renderToken) return;
@@ -247,12 +266,8 @@
     await preload(resolved.view.image);
     if (token !== renderToken) return;
 
-    if (resolved.route) {
-      currentHash = hashFor(resolved.route);
-      if (location.hash !== currentHash) {
-        history.replaceState(null, "", `${location.pathname}${location.search}${currentHash}`);
-      }
-    }
+    // 再読み込みのたびに主人公を選び直せるよう、URL には現在地を残さない
+    if (location.hash) history.replaceState(null, "", `${location.pathname}${location.search}`);
 
     markSub.textContent = resolved.version ? resolved.version.title : "";
     document.title = resolved.version ? `limen — ${resolved.version.title}` : "limen";
@@ -271,9 +286,7 @@
 
   function navigate(route) {
     if (choices.inert) return;
-    currentHash = hashFor(route);
-    history.replaceState(null, "", `${location.pathname}${location.search}${currentHash}`);
-    render();
+    render(route);
   }
 
   // ---- 操作 ----
@@ -291,7 +304,7 @@
     if (event.metaKey || event.ctrlKey || event.altKey) return;
 
     if (event.key === " " || event.key === "Enter") {
-      if (document.activeElement && document.activeElement.classList.contains("choice")) return;
+      if (document.activeElement && document.activeElement.closest("button, a, input")) return;
       if (choices.inert) {
         event.preventDefault();
         skip();
@@ -307,8 +320,8 @@
   });
 
   window.addEventListener("hashchange", () => {
-    if (location.hash !== currentHash) render();
+    if (location.hash) render(parseRoute());
   });
 
-  render();
+  render(parseRoute());
 })();

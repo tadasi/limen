@@ -216,18 +216,6 @@ body {
   outline-offset: 3px;
 }
 
-.choice-label,
-.choice-note {
-  display: block;
-}
-
-.choice-note {
-  margin-top: 0.35em;
-  font-size: 0.8125rem;
-  letter-spacing: 0.04em;
-  color: var(--ink-dim);
-}
-
 /* ---- ふわっと現れる演出 ---- */
 
 .fx {
