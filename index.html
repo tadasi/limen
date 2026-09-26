@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>limen</title>
+  <meta name="description" content="夢と現実の敷居をまたぐ、選択式の物語。">
+  <meta name="theme-color" content="#07070b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="mark">limen</header>
+
+  <main class="stage" id="stage">
+    <figure class="illustration fx" id="illustration">
+      <img id="illustration-image" alt="">
+    </figure>
+
+    <section class="narrative" id="narrative" aria-live="polite"></section>
+
+    <nav class="choices" id="choices" aria-label="選択肢" inert></nav>
+  </main>
+
+  <noscript><p class="noscript">この物語の表示には JavaScript が必要です。</p></noscript>
+
+  <script src="story/sample.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

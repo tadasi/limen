@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <radialGradient id="room" cx="0.5" cy="0.4" r="0.75">
+      <stop offset="0" stop-color="#2d2230"/>
+      <stop offset="1" stop-color="#08070b"/>
+    </radialGradient>
+    <radialGradient id="light" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f1d6b8" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#f1d6b8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="haze" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2"/></filter>
+    <filter id="ghost" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <g id="figure">
+      <circle cx="0" cy="-150" r="46"/>
+      <path d="M-40 -104 C -80 -96, -104 -60, -108 0 L -108 80 L 108 80 L 108 0 C 104 -60, 80 -96, 40 -104 C 20 -92, -20 -92, -40 -104 Z"/>
+    </g>
+    <g id="chair">
+      <rect x="-90" y="40" width="180" height="22" rx="4"/>
+      <rect x="-80" y="62" width="10" height="120"/>
+      <rect x="70" y="62" width="10" height="120"/>
+    </g>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#room)"/>
+  <ellipse cx="600" cy="170" rx="360" ry="220" fill="url(#light)"/>
+  <rect x="0" y="600" width="1200" height="200" fill="#0c0a10" opacity="0.7"/>
+
+  <!-- 小さな卓 -->
+  <g filter="url(#haze)">
+    <rect x="530" y="470" width="140" height="10" fill="#4a3d44"/>
+    <rect x="595" y="480" width="10" height="130" fill="#3a3036"/>
+    <ellipse cx="600" cy="614" rx="60" ry="8" fill="#1a151b"/>
+  </g>
+
+  <!-- 話し続ける自分（左） -->
+  <g transform="translate(360 470)" filter="url(#haze)">
+    <use href="#chair" fill="#2c2430"/>
+    <use href="#figure" fill="#b8a9a2"/>
+  </g>
+
+  <!-- 席を譲る自分（右）：輪郭がまだ定まらない -->
+  <g transform="translate(840 470)">
+    <use href="#chair" fill="#2c2430" filter="url(#haze)"/>
+    <g filter="url(#ghost)" opacity="0.55">
+      <use href="#figure" fill="#b8a9a2"/>
+    </g>
+    <g transform="translate(34 -22)" filter="url(#ghost)" opacity="0.22">
+      <use href="#figure" fill="#d6c6bf"/>
+    </g>
+  </g>
+
+  <!-- ふたりの間を漂う言葉のかけら -->
+  <g fill="#f1e2d3" filter="url(#haze)">
+    <circle cx="470" cy="300" r="3" opacity="0.6"/>
+    <circle cx="530" cy="270" r="2.4" opacity="0.5"/>
+    <circle cx="600" cy="255" r="2" opacity="0.45"/>
+    <circle cx="670" cy="270" r="2.4" opacity="0.4"/>
+    <circle cx="735" cy="300" r="3" opacity="0.3"/>
+  </g>
+
+  <rect width="1200" height="800" filter="url(#grain)" opacity="0.08"/>
+</svg>

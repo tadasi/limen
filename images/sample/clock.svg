@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <radialGradient id="deep" cx="0.5" cy="0.55" r="0.7">
+      <stop offset="0" stop-color="#15303a"/>
+      <stop offset="1" stop-color="#05090d"/>
+    </radialGradient>
+    <radialGradient id="face" cx="0.45" cy="0.4" r="0.7">
+      <stop offset="0" stop-color="#e9e2cf"/>
+      <stop offset="0.7" stop-color="#a9a491"/>
+      <stop offset="1" stop-color="#5d5b50"/>
+    </radialGradient>
+    <linearGradient id="caustic" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8fd3d8" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#8fd3d8" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="haze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.5"/></filter>
+    <filter id="wave" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="9"/>
+      <feDisplacementMap in="SourceGraphic" scale="18"/>
+    </filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#deep)"/>
+  <path d="M0 0 L520 0 L260 800 L0 800 Z" fill="url(#caustic)" filter="url(#soft)"/>
+  <path d="M760 0 L1000 0 L820 800 L700 800 Z" fill="url(#caustic)" filter="url(#soft)"/>
+
+  <!-- 寝息の波紋 -->
+  <g fill="none" stroke="#bfe6e3" filter="url(#haze)">
+    <circle cx="600" cy="430" r="190" stroke-opacity="0.18" stroke-width="2"/>
+    <circle cx="600" cy="430" r="250" stroke-opacity="0.11" stroke-width="2"/>
+    <circle cx="600" cy="430" r="320" stroke-opacity="0.06" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#wave)">
+    <!-- 鎖 -->
+    <path d="M600 290 C 640 230, 720 200, 820 170" fill="none" stroke="#8d8a7c" stroke-width="5" stroke-dasharray="10 7" opacity="0.7"/>
+    <circle cx="600" cy="282" r="16" fill="none" stroke="#9e9a88" stroke-width="7"/>
+    <!-- 本体 -->
+    <circle cx="600" cy="430" r="150" fill="#6e6a5c"/>
+    <circle cx="600" cy="430" r="132" fill="url(#face)"/>
+    <g stroke="#3b3a33" stroke-width="3" opacity="0.55">
+      <line x1="600" y1="312" x2="600" y2="330"/>
+      <line x1="600" y1="530" x2="600" y2="548"/>
+      <line x1="482" y1="430" x2="500" y2="430"/>
+      <line x1="700" y1="430" x2="718" y2="430"/>
+      <line x1="541" y1="328" x2="550" y2="343"/>
+      <line x1="659" y1="328" x2="650" y2="343"/>
+      <line x1="541" y1="532" x2="550" y2="517"/>
+      <line x1="659" y1="532" x2="650" y2="517"/>
+      <line x1="498" y1="371" x2="513" y2="380"/>
+      <line x1="702" y1="371" x2="687" y2="380"/>
+      <line x1="498" y1="489" x2="513" y2="480"/>
+      <line x1="702" y1="489" x2="687" y2="480"/>
+    </g>
+    <!-- 針のかわりに、針の影だけ -->
+    <line x1="600" y1="430" x2="648" y2="372" stroke="#2c2b26" stroke-width="5" opacity="0.14" filter="url(#haze)"/>
+    <circle cx="600" cy="430" r="5" fill="#3b3a33" opacity="0.6"/>
+  </g>
+
+  <!-- 砂 -->
+  <ellipse cx="600" cy="790" rx="760" ry="120" fill="#1d2a2c" opacity="0.8" filter="url(#soft)"/>
+  <g fill="#dff5f2" opacity="0.5" filter="url(#haze)">
+    <circle cx="380" cy="260" r="4"/>
+    <circle cx="392" cy="210" r="3"/>
+    <circle cx="402" cy="160" r="2"/>
+    <circle cx="840" cy="330" r="3"/>
+    <circle cx="852" cy="280" r="2"/>
+  </g>
+
+  <rect width="1200" height="800" filter="url(#grain)" opacity="0.08"/>
+</svg>

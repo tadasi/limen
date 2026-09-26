@@ -1,0 +1,284 @@
+:root {
+  --bg: #07070b;
+  --ink: #d9d4cc;
+  --ink-dim: rgba(217, 212, 204, 0.5);
+  --line: rgba(217, 212, 204, 0.16);
+  --line-strong: rgba(217, 212, 204, 0.42);
+  --glow: rgba(185, 196, 214, 0.14);
+
+  /* レイアウト枠 */
+  --stage-width: 720px;
+  --illust-ratio: 3 / 2;
+  --text-size: 1.0625rem;
+  --text-leading: 2;
+  /* 1 場面あたり約 180 字（3 段落）が収まる高さ。場面ごとの文量差で選択肢の位置が揺れないよう確保する */
+  --text-min-height: 13em;
+
+  /* 演出の長さ（JS 側の待ち時間は js/main.js の TIMING と揃える） */
+  --fade-in: 1400ms;
+  --fade-in-image: 2200ms;
+  --fade-out: 700ms;
+
+  --mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mincho);
+  font-feature-settings: "palt";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---- 背景：ぼんやりした闇 ---- */
+
+.backdrop {
+  position: fixed;
+  inset: -15%;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 24% 26%, rgba(62, 72, 122, 0.5), transparent 42%),
+    radial-gradient(circle at 78% 70%, rgba(98, 60, 94, 0.4), transparent 46%),
+    radial-gradient(circle at 50% 104%, rgba(38, 86, 94, 0.42), transparent 52%),
+    var(--bg);
+  filter: blur(48px);
+  animation: drift 70s ease-in-out infinite alternate;
+}
+
+.backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(0, 0, 0, 0.75) 100%);
+}
+
+@keyframes drift {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to   { transform: translate3d(2%, 1.5%, 0) scale(1.08); }
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- 枠 ---- */
+
+.mark {
+  padding: 28px 16px 0;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.6em;
+  text-indent: 0.6em;
+  color: var(--ink-dim);
+  text-transform: lowercase;
+}
+
+.stage {
+  width: 100%;
+  max-width: calc(var(--stage-width) + 32px);
+  margin: 0 auto;
+  padding: 28px 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.illustration {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  aspect-ratio: var(--illust-ratio);
+  overflow: hidden;
+  /* 縁を背景に溶かす。直線的なフェードだと境目が帯に見える（マッハバンド）ため、両端をなだらかにする */
+  --feather-stops:
+    transparent 0%,
+    rgba(0, 0, 0, 0.06) 2.5%,
+    rgba(0, 0, 0, 0.22) 5%,
+    rgba(0, 0, 0, 0.5) 8%,
+    rgba(0, 0, 0, 0.78) 11%,
+    rgba(0, 0, 0, 0.94) 14%,
+    #000 17%,
+    #000 83%,
+    rgba(0, 0, 0, 0.94) 86%,
+    rgba(0, 0, 0, 0.78) 89%,
+    rgba(0, 0, 0, 0.5) 92%,
+    rgba(0, 0, 0, 0.22) 95%,
+    rgba(0, 0, 0, 0.06) 97.5%,
+    transparent 100%;
+  -webkit-mask-image:
+    linear-gradient(to right, var(--feather-stops)),
+    linear-gradient(to bottom, var(--feather-stops));
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to right, var(--feather-stops)),
+    linear-gradient(to bottom, var(--feather-stops));
+          mask-composite: intersect;
+}
+
+.illustration img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.narrative {
+  min-height: var(--text-min-height);
+  font-size: var(--text-size);
+  line-height: var(--text-leading);
+  letter-spacing: 0.04em;
+  text-align: justify;
+  line-break: strict;
+  cursor: default;
+}
+
+.narrative p {
+  margin: 0 0 1em;
+}
+
+.narrative p:last-child {
+  margin-bottom: 0;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.choice {
+  display: block;
+  width: 100%;
+  padding: 0.95em 1.2em;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.015);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.975rem;
+  letter-spacing: 0.06em;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    opacity var(--fade-out) ease,
+    filter var(--fade-out) ease,
+    transform var(--fade-out) ease,
+    border-color 400ms ease,
+    background-color 400ms ease,
+    box-shadow 400ms ease;
+}
+
+.choice:hover,
+.choice:focus-visible {
+  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: 0 0 28px var(--glow);
+  outline: none;
+}
+
+.choice:focus-visible {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 3px;
+}
+
+/* ---- ふわっと現れる演出 ---- */
+
+.fx {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(6px);
+  transition:
+    opacity var(--fade-out) ease,
+    filter var(--fade-out) ease,
+    transform var(--fade-out) ease;
+}
+
+.illustration.fx {
+  filter: blur(18px);
+  transform: scale(1.035);
+}
+
+.stage.is-shown .fx {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition-duration: var(--fade-in);
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--delay, 0ms);
+}
+
+.stage.is-shown .illustration.fx {
+  transition-duration: var(--fade-in-image);
+}
+
+.stage.is-shown .choice.fx {
+  transition:
+    opacity var(--fade-in) ease var(--delay, 0ms),
+    filter var(--fade-in) ease var(--delay, 0ms),
+    transform var(--fade-in) ease var(--delay, 0ms),
+    border-color 400ms ease,
+    background-color 400ms ease,
+    box-shadow 400ms ease;
+}
+
+/* クリックで演出を飛ばしたとき */
+.stage.is-instant .fx,
+.stage.is-instant .choice.fx {
+  transition-duration: 350ms;
+  transition-delay: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
+
+  .fx,
+  .stage.is-shown .fx,
+  .stage.is-shown .illustration.fx,
+  .stage.is-shown .choice.fx {
+    transition-duration: 1ms;
+    transition-delay: 0ms;
+    filter: none;
+    transform: none;
+  }
+}
+
+.noscript {
+  text-align: center;
+  color: var(--ink-dim);
+}
+
+@media (max-width: 520px) {
+  :root {
+    --text-size: 1rem;
+    /* 1 行が短くなるぶん行数が増える */
+    --text-min-height: 19em;
+  }
+
+  .stage {
+    gap: 24px;
+    padding-top: 20px;
+  }
+}
