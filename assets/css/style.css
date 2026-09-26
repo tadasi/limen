@@ -14,7 +14,7 @@
   /* 1 場面あたり約 180 字（3 段落）が収まる高さ。場面ごとの文量差で選択肢の位置が揺れないよう確保する */
   --text-min-height: 13em;
 
-  /* 演出の長さ（JS 側の待ち時間は js/main.js の TIMING と揃える） */
+  /* 演出の長さ（JS 側の待ち時間は assets/js/main.js の TIMING と揃える） */
   --fade-in: 1400ms;
   --fade-in-image: 2200ms;
   --fade-out: 700ms;
@@ -85,11 +85,25 @@ body {
 .mark {
   padding: 28px 16px 0;
   text-align: center;
+  color: var(--ink-dim);
+}
+
+.mark-title {
   font-size: 0.75rem;
   letter-spacing: 0.6em;
-  text-indent: 0.6em;
-  color: var(--ink-dim);
+  margin-right: -0.6em;
+  color: inherit;
+  text-decoration: none;
   text-transform: lowercase;
+}
+
+.mark-sub {
+  margin: 8px 0 0;
+  min-height: 1.5em;
+  font-size: 0.6875rem;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  opacity: 0.7;
 }
 
 .stage {
@@ -200,6 +214,18 @@ body {
 .choice:focus-visible {
   outline: 1px solid var(--line-strong);
   outline-offset: 3px;
+}
+
+.choice-label,
+.choice-note {
+  display: block;
+}
+
+.choice-note {
+  margin-top: 0.35em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
 }
 
 /* ---- ふわっと現れる演出 ---- */

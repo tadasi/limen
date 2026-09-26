@@ -1,9 +1,8 @@
-window.LIMEN_STORY = {
-  title: "サンプル",
+LIMEN.registerStory("v1", "doorway", {
   start: "threshold",
   scenes: {
     threshold: {
-      image: "images/sample/threshold.svg",
+      image: "../images/threshold.svg",
       alt: "戸口まで満ちた水面に、見知らぬ夜空が映っている",
       text: [
         "目を開けると、部屋の戸口まで水が満ちていた。",
@@ -17,7 +16,7 @@ window.LIMEN_STORY = {
     },
 
     water: {
-      image: "images/sample/clock.svg",
+      image: "../images/clock.svg",
       alt: "水底に沈んだ、針のない懐中時計",
       text: [
         "水は冷たくなかった。むしろ、自分の体温と寸分違わない温度をしている。",
@@ -31,7 +30,7 @@ window.LIMEN_STORY = {
     },
 
     window: {
-      image: "images/sample/window.svg",
+      image: "../images/window.svg",
       alt: "昼と夜が縞模様に並ぶ窓の外を、一羽の鳥が行き来している",
       text: [
         "窓の外では、昼と夜が縞模様になって並んでいた。",
@@ -45,7 +44,7 @@ window.LIMEN_STORY = {
     },
 
     listen: {
-      image: "images/sample/clock.svg",
+      image: "../images/clock.svg",
       alt: "水底に沈んだ、針のない懐中時計",
       text: [
         "耳を当てると、寝息はふいに近くなった。",
@@ -59,7 +58,7 @@ window.LIMEN_STORY = {
     },
 
     corridor: {
-      image: "images/sample/corridor.svg",
+      image: "../images/corridor.svg",
       alt: "同じかたちの扉が、どこまでも並ぶ廊下",
       text: [
         "廊下の両側に、同じかたちの扉がどこまでも並んでいる。",
@@ -73,25 +72,31 @@ window.LIMEN_STORY = {
     },
 
     dawn: {
-      image: "images/sample/dawn.svg",
+      image: "../images/dawn.svg",
       alt: "夜明け前の波打ち際に、揃えて置かれた靴",
       text: [
         "扉の向こうは、夜明け前の浜辺だった。",
         "波打ち際に、誰かが置いていった靴が揃えてある。履いてみると、あつらえたように足に馴染んだ。遠くで、あの寝息が朝の波音にほどけていく。",
         "ここがどちら側なのか、もう確かめる必要はない気がした。",
       ],
-      choices: [{ label: "もう一度、目を閉じる", next: "threshold" }],
+      choices: [
+        { label: "もう一度、目を閉じる", next: "threshold" },
+        { label: "別の誰かの夢へ", next: "@select" },
+      ],
     },
 
     echo: {
-      image: "images/sample/echo.svg",
+      image: "../images/echo.svg",
       alt: "向かい合って座る、同じ姿のふたり",
       text: [
         "扉を開けると、そこには自分がいた。",
         "その人は穏やかに笑い、今日あったことを話し続けている。話の中の自分は、少しだけ幸福そうだった。やがて話し終えると、その人は席を立ち、こちらに椅子を譲った。",
         "座った瞬間、自分の口が、知らない今日を語りはじめる。",
       ],
-      choices: [{ label: "もう一度、目を閉じる", next: "threshold" }],
+      choices: [
+        { label: "もう一度、目を閉じる", next: "threshold" },
+        { label: "別の誰かの夢へ", next: "@select" },
+      ],
     },
   },
-};
+});
