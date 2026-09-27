@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0f2c"/>
+      <stop offset="1" stop-color="#1b244b"/>
+    </linearGradient>
+    <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd8a0" stop-opacity="0.5"/>
+      <stop offset="0.6" stop-color="#ffd8a0" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#ffd8a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="lampGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffe6ba" stop-opacity="0.95"/>
+      <stop offset="0.3" stop-color="#ffcf8a" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd79c" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffd79c" stop-opacity="0.03"/>
+    </linearGradient>
+    <radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#dfe4ff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#dfe4ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="curtain" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#0c0b12"/>
+      <stop offset="0.5" stop-color="#1a1822"/>
+      <stop offset="1" stop-color="#0e0d14"/>
+    </linearGradient>
+    <clipPath id="glass"><rect x="120" y="60" width="880" height="620"/></clipPath>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
+    <filter id="haze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.8"/></filter>
+    <filter id="fur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.4"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+
+  <g>
+  <rect width="1200" height="800" fill="#07070b"/>
+
+  <g clip-path="url(#glass)">
+    <rect x="120" y="60" width="880" height="620" fill="url(#sky)"/>
+    <circle cx="260" cy="140" r="100" fill="url(#moonGlow)"/>
+    <circle cx="260" cy="140" r="24" fill="#f2f1e8"/>
+    <!-- 向かいの家の壁（近い） -->
+    <path d="M120 250 L360 250 L420 215 L700 215 L760 250 L1000 250 L1000 470 L120 470 Z" fill="#0d0f1b"/>
+    <rect x="200" y="300" width="60" height="70" fill="#151829"/>
+    <rect x="520" y="290" width="70" height="80" fill="#151829"/>
+    <rect x="840" y="300" width="60" height="70" fill="#151829"/>
+    <rect x="120" y="440" width="880" height="30" fill="#111424"/>
+    <!-- 路地 -->
+    <rect x="120" y="470" width="880" height="210" fill="#0f111a"/>
+    <!-- 街灯（右寄り） -->
+    <polygon points="760,300 784,300 900,660 600,660" fill="url(#cone)"/>
+    <ellipse cx="700" cy="610" rx="260" ry="70" fill="url(#pool)"/>
+    <rect x="768" y="300" width="8" height="330" fill="#1b1e2b"/>
+    <path d="M752 296 L792 296 L784 286 L760 286 Z" fill="#23263a"/>
+    <circle cx="772" cy="300" r="64" fill="url(#lampGlow)"/>
+
+    <!-- 横向きに座って窓を見上げる白い犬 -->
+    <ellipse cx="672" cy="648" rx="78" ry="10" fill="#050508" opacity="0.55" filter="url(#haze)"/>
+    <g filter="url(#fur)">
+      <path d="M704 642 C 734 644, 752 634, 756 618" stroke="#ece8de" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <ellipse cx="684" cy="614" rx="44" ry="32" fill="#ebe7dc"/>
+      <ellipse cx="704" cy="640" rx="24" ry="7" fill="#e2ddd1"/>
+      <path d="M636 642 C 624 610, 624 572, 634 544 C 642 522, 660 514, 674 524 C 688 550, 694 592, 704 636 Z" fill="#f1ede4"/>
+      <rect x="636" y="596" width="11" height="48" rx="5" fill="#e7e2d7"/>
+      <rect x="653" y="598" width="11" height="46" rx="5" fill="#e0dbcf"/>
+      <ellipse cx="650" cy="516" rx="25" ry="20" fill="#f3efe6"/>
+      <path d="M636 512 C 626 498, 620 486, 622 474 C 632 472, 644 482, 656 502 Z" fill="#f3efe6"/>
+      <path d="M664 504 C 678 506, 684 524, 678 542 C 670 536, 664 524, 660 512 Z" fill="#d8d2c4"/>
+    </g>
+    <circle cx="623" cy="474" r="4" fill="#2a2a33"/>
+    <circle cx="644" cy="506" r="2.4" fill="#2a2a33" opacity="0.8"/>
+    <!-- くわえた封筒 -->
+    <g transform="rotate(-35 618 490)">
+      <rect x="592" y="478" width="54" height="32" fill="#e6d8bd"/>
+      <path d="M592 478 L 619 498 L 646 478" stroke="#bfae8e" stroke-width="2" fill="none"/>
+    </g>
+  </g>
+
+  <!-- 窓枠と窓台 -->
+  <g fill="none" stroke="#1a1920">
+    <rect x="110" y="50" width="900" height="640" stroke-width="20"/>
+    <line x1="560" y1="50" x2="560" y2="690" stroke-width="12"/>
+  </g>
+  <rect x="90" y="690" width="940" height="30" fill="#121117"/>
+  <rect x="90" y="690" width="940" height="4" fill="#2a2833"/>
+
+  <!-- 右側のカーテン -->
+  <path d="M1150 30 C 1080 50, 1050 60, 960 52 L 972 800 C 1040 790, 1100 796, 1150 800 Z" fill="url(#curtain)"/>
+  <path d="M1080 50 C 1070 300, 1086 560, 1072 800" stroke="#0a0910" stroke-width="10" fill="none" opacity="0.7"/>
+  </g>
+
+  <rect width="1200" height="800" filter="url(#grain)" opacity="0.08"/>
+</svg>

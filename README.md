@@ -7,7 +7,7 @@
 ## 物語の約束
 
 - 開くたびに、最新バージョンの主人公からランダムに一人が選ばれる（同じ主人公が続くこともある）。
-- 物語はループしない。どの選択肢をたどっても、必ずいずれかの結末に行き着く。
+- 物語は枝分かれだけの木の形で、ループも合流もしない。どの選択肢をたどっても必ずいずれかの結末に行き着き、選ぶたびに新しいイラストと本文の場面へ進む。
 - 結末では「もう一度、目を閉じる」だけが表示され、押すと再びランダムに選ばれた主人公の夢が始まる。
 
 ## 手元で見る
@@ -27,7 +27,7 @@ open -a "Google Chrome" index.html
 | `index.html` | 最新バージョンの、ランダムな主人公の最初の場面 |
 | `index.html#/v1` | v1 の、ランダムな主人公の最初の場面 |
 | `index.html#/v1/windowsill` | v1・窓辺の人の最初の場面 |
-| `index.html#/v1/windowsill/sail` | v1・窓辺の人の `sail` 場面 |
+| `index.html#/v1/windowsill/dog` | v1・窓辺の人の `dog` 場面 |
 
 開いたあとは URL から指定が消える。再読み込みすると、またランダムな主人公から始まる。存在しない主人公や場面を指定した場合は、ランダムな主人公、またはその主人公の最初の場面になる。
 
@@ -43,15 +43,11 @@ stories/
   index.js                    バージョン一覧と最新バージョン
   v1/
     version.js                v1 の題と主人公一覧
-    world.md                  v1 の世界の規則（執筆・生成用の設定）
-    images/                   v1 の主人公どうしで共有する画像
-    doorway/
-      story.js                主人公「戸口の人」の場面一式
+    world.md                  v1 の世界の規則と物語の骨子（執筆・生成用の設定）
     windowsill/
       story.js                主人公「窓辺の人」の場面一式
+      images/                 その主人公の場面のイラスト
 ```
-
-主人公だけが使う画像は、その主人公のディレクトリに `images/` を作って置く。
 
 `file://` で直接開いても動くように、データは JSON ではなく JS として `<script>` で読み込む。読み込むのは、表示に必要なバージョンと主人公の分だけ。
 
@@ -72,7 +68,7 @@ LIMEN.catalog({
 LIMEN.registerVersion("v1", {
   title: "見立て",                       // ヘッダーとページタイトルに出る
   protagonists: [                        // この中からランダムに一人が選ばれる
-    { id: "doorway", name: "戸口の人" },
+    { id: "windowsill", name: "窓辺の人" },
   ],
 });
 ```
@@ -80,19 +76,19 @@ LIMEN.registerVersion("v1", {
 ### 主人公の物語（`stories/<version>/<protagonist>/story.js`）
 
 ```js
-LIMEN.registerStory("v1", "doorway", {
-  start: "threshold",                    // 最初の場面 ID
+LIMEN.registerStory("v1", "windowsill", {
+  start: "streetlamp",                   // 最初の場面 ID
   scenes: {
-    threshold: {
-      image: "../images/threshold.svg",  // このファイル基準の相対パス
+    streetlamp: {
+      image: "images/streetlamp.svg",    // このファイル基準の相対パス
       alt: "画像の説明",
       text: ["段落1", "段落2", "段落3"],  // 段落ごとに順にふわっと表示される
       choices: [
         { label: "選択肢の文言", next: "次の場面 ID" },
       ],
     },
-    dawn: {
-      image: "../images/dawn.svg",
+    "dog-letter": {
+      image: "images/dog-letter.svg",
       alt: "画像の説明",
       text: ["段落1", "段落2", "段落3"],
       ending: true,                      // 結末。choices は書かない
@@ -107,6 +103,8 @@ LIMEN.registerStory("v1", "doorway", {
 - 結末以外の場面に選択肢があるか、結末に選択肢が書かれていないか
 - 選択肢の行き先の場面が存在するか
 - どこからもたどり着けない場面がないか
+- 複数の場面から同じ場面へ合流していないか
+- 同じイラストや同じ本文を複数の場面で使っていないか
 
 ## 追加の手順
 
@@ -119,7 +117,7 @@ LIMEN.registerStory("v1", "doorway", {
 |---|---|---|
 | 本文の幅 | 最大 720px | `--stage-width` |
 | イラストの比率 | 3:2（推奨 1200×800） | `--illust-ratio` |
-| 本文の量 | 1 場面あたり 3 段落・約 180 字 | `--text-min-height` |
+| 本文の量 | 1 場面あたり約 200〜250 字（収まらない分はスクロール） | `--text-min-height` |
 | 選択肢 | 1〜3 個 | — |
 
 ## 操作

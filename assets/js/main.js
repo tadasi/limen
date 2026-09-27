@@ -121,6 +121,30 @@
       .filter((id) => !reached.has(id))
       .forEach((id) => problems.push(`"${id}" にはどこからもたどり着けません`));
 
+    // 選ぶたびに必ず新しい場面へ進むよう、合流と使い回しを禁じる
+    const incoming = {};
+    ids.forEach((id) =>
+      (story.scenes[id].choices || []).forEach((choice) => {
+        (incoming[choice.next] = incoming[choice.next] || []).push(id);
+      })
+    );
+    Object.entries(incoming)
+      .filter(([, from]) => from.length > 1)
+      .forEach(([id, from]) => problems.push(`"${id}" に複数の場面から合流しています: ${from.join(", ")}`));
+
+    [
+      ["イラスト", (scene) => scene.image],
+      ["本文", (scene) => (scene.text || []).join("\n")],
+    ].forEach(([label, key]) => {
+      const seen = {};
+      ids.forEach((id) => {
+        const value = key(story.scenes[id]);
+        if (!value) return;
+        if (seen[value]) problems.push(`"${seen[value]}" と "${id}" で同じ${label}を使っています`);
+        else seen[value] = id;
+      });
+    });
+
     return problems;
   }
 

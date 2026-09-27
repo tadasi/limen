@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <radialGradient id="pool" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd8a0" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#ffd8a0" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffd8a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="lampGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffe6ba" stop-opacity="0.95"/>
+      <stop offset="0.3" stop-color="#ffcf8a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aura" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f6efe2" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#f6efe2" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b0d16"/>
+      <stop offset="1" stop-color="#11131d"/>
+    </linearGradient>
+    <linearGradient id="cardigan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1ebe0"/>
+      <stop offset="1" stop-color="#cfc7bb"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="haze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2"/></filter>
+    <!-- 姉にそう見えているだけの、輪郭の定まらない姿 -->
+    <filter id="vague" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11" result="warp"/>
+      <feDisplacementMap in="SourceGraphic" in2="warp" scale="14" xChannelSelector="R" yChannelSelector="G" result="moved"/>
+      <feGaussianBlur in="moved" stdDeviation="3.2"/>
+    </filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+
+  <g>
+    <!-- 二階から見下ろした路地 -->
+    <rect width="1200" height="800" fill="url(#ground)"/>
+    <rect x="0" y="0" width="1200" height="170" fill="#0a0c15"/>
+    <rect x="0" y="160" width="1200" height="16" fill="#151827"/>
+    <g stroke="#171a26" stroke-width="3">
+      <line x1="0" y1="470" x2="1200" y2="430"/>
+      <line x1="0" y1="690" x2="1200" y2="650"/>
+    </g>
+
+    <rect x="236" y="0" width="12" height="330" fill="#1a1c28"/>
+    <path d="M214 322 L270 322 L262 340 L222 340 Z" fill="#2a2c3c"/>
+
+    <!-- 窓枠の端（二階から見下ろしている） -->
+    <rect x="0" y="0" width="1200" height="34" fill="#141319"/>
+    <rect x="1150" y="0" width="50" height="800" fill="#141319"/>
+    <rect x="1142" y="0" width="8" height="800" fill="#24222c"/>
+  </g>
+
+  <!-- 街灯の光の輪 -->
+  <ellipse cx="610" cy="520" rx="420" ry="230" fill="url(#pool)"/>
+  <circle cx="242" cy="330" r="130" fill="url(#lampGlow)"/>
+
+  <!-- 見上げて手を振る、澪に見える姿 -->
+  <ellipse cx="650" cy="470" rx="170" ry="210" fill="url(#aura)"/>
+  <ellipse cx="652" cy="636" rx="64" ry="14" fill="#050508" opacity="0.45" filter="url(#soft)"/>
+  <g filter="url(#vague)">
+    <path d="M632 530 C 630 570, 628 600, 632 630 L 644 630 C 646 600, 646 570, 648 534 Z" fill="#d8d0c5"/>
+    <path d="M656 534 C 658 570, 660 600, 660 630 L 672 630 C 674 600, 672 570, 670 530 Z" fill="#d8d0c5"/>
+    <path d="M604 470 C 600 510, 606 540, 610 552 C 640 562, 666 562, 694 552 C 698 540, 704 510, 700 470 Z" fill="#b9b3ad"/>
+    <path d="M600 384 C 610 364, 694 364, 704 384 C 712 420, 712 460, 706 486 C 680 496, 624 496, 598 486 C 592 460, 592 420, 600 384 Z" fill="url(#cardigan)"/>
+    <path d="M700 394 C 718 420, 724 456, 718 494" stroke="#e4ddd2" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path d="M606 394 C 582 370, 562 336, 554 300" stroke="#e7e0d5" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <circle cx="551" cy="290" r="12" fill="#eee5d9"/>
+    <path d="M606 318 C 600 258, 704 258, 698 318 C 702 344, 702 366, 696 380 C 684 388, 674 386, 670 376 L 634 376 C 630 386, 620 388, 608 380 C 602 366, 602 344, 606 318 Z" fill="#1b1826"/>
+    <ellipse cx="652" cy="336" rx="24" ry="29" fill="#e9dfd2"/>
+    <path d="M622 318 C 628 288, 676 288, 682 318 C 666 306, 638 306, 622 318 Z" fill="#1b1826"/>
+  </g>
+
+  <rect width="1200" height="800" filter="url(#grain)" opacity="0.08"/>
+</svg>

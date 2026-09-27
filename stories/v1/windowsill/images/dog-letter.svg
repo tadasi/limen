@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b9cc0"/>
+      <stop offset="0.5" stop-color="#e6c8bf"/>
+      <stop offset="1" stop-color="#ffdcae"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fffbf2"/>
+      <stop offset="0.2" stop-color="#ffefcf" stop-opacity="0.9"/>
+      <stop offset="0.55" stop-color="#ffd9a0" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffc98a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbf3e2"/>
+      <stop offset="1" stop-color="#ecdcbd"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8cdb8"/>
+      <stop offset="1" stop-color="#c7a790"/>
+    </linearGradient>
+    <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff2d8" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#fff2d8" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="bg" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="rays" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+    <filter id="smudge" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4.5"/></filter>
+    <filter id="ink" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="0.5"/></filter>
+    <filter id="hand" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.2"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+
+  <!-- ぼやけた朝の路地。封筒の向こうから朝日が差す -->
+  <g filter="url(#bg)">
+    <rect width="1200" height="800" fill="url(#sky)"/>
+    <polygon points="0,120 360,330 360,800 0,800" fill="#6d6070"/>
+    <polygon points="1200,150 840,340 840,800 1200,800" fill="#6d6070"/>
+    <rect x="360" y="480" width="480" height="320" fill="#b59d98"/>
+  </g>
+  <circle cx="600" cy="300" r="360" fill="url(#sun)"/>
+  <g fill="url(#ray)" filter="url(#rays)">
+    <polygon points="590,300 610,300 1000,800 860,800"/>
+    <polygon points="590,300 610,300 340,800 200,800"/>
+    <polygon points="590,300 610,300 1200,560 1200,700"/>
+    <polygon points="590,300 610,300 0,560 0,700"/>
+  </g>
+
+  <g>
+    <!-- 両手に持った封筒 -->
+    <g transform="rotate(-4 600 440)">
+      <rect x="330" y="282" width="560" height="344" rx="4" fill="#6b4f3f" opacity="0.15" filter="url(#bg)"/>
+      <rect x="320" y="266" width="560" height="340" rx="6" fill="url(#paper)"/>
+      <!-- 朝日で縁が光る -->
+      <rect x="320" y="266" width="560" height="340" rx="6" fill="none" stroke="#fff6e4" stroke-width="3" opacity="0.8"/>
+      <!-- 宛名（右上がりの字） -->
+      <g stroke="#44465c" stroke-width="3" fill="none" stroke-linecap="round" filter="url(#ink)">
+        <path d="M480 440 c 12 -8, 18 4, 30 -6 s 16 2, 26 -8 s 18 6, 30 -4 s 14 0, 24 -8 s 20 4, 30 -6 s 12 2, 22 -6"/>
+        <path d="M510 490 c 10 -6, 16 2, 26 -6 s 14 4, 24 -6 s 16 2, 26 -6 s 18 4, 28 -8 s 14 2, 22 -4"/>
+        <path d="M440 360 c 8 -4, 12 2, 20 -4 s 10 2, 18 -4"/>
+      </g>
+      <!-- 切手 -->
+      <rect x="772" y="292" width="78" height="94" rx="3" fill="#9db1c4"/>
+      <rect x="780" y="300" width="62" height="78" rx="2" fill="#c8d6e0"/>
+      <path d="M788 360 C 800 332, 822 332, 834 360" stroke="#6a86a2" stroke-width="3" fill="none"/>
+      <!-- 滲んで読めない消印 -->
+      <g filter="url(#smudge)" opacity="0.65">
+        <circle cx="772" cy="360" r="46" fill="none" stroke="#51638f" stroke-width="5"/>
+        <rect x="722" y="348" width="100" height="10" fill="#51638f" opacity="0.6"/>
+        <ellipse cx="762" cy="380" rx="40" ry="18" fill="#51638f" opacity="0.35"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- 封筒を支える手（角のない、柔らかな形） -->
+  <g filter="url(#hand)">
+    <path d="M232 820 C 236 730, 262 650, 300 606 C 318 586, 346 572, 364 580 C 384 590, 384 616, 368 634 C 350 654, 336 690, 334 740 C 332 770, 336 800, 340 820 Z" fill="url(#skin)"/>
+    <path d="M318 590 C 334 556, 360 536, 382 540 C 398 544, 400 566, 384 584 C 370 598, 350 604, 330 602 Z" fill="#dcbfa9"/>
+    <path d="M968 820 C 964 730, 938 650, 900 606 C 882 586, 854 572, 836 580 C 816 590, 816 616, 832 634 C 850 654, 864 690, 866 740 C 868 770, 864 800, 860 820 Z" fill="url(#skin)"/>
+    <path d="M882 590 C 866 556, 840 536, 818 540 C 802 544, 800 566, 816 584 C 830 598, 850 604, 870 602 Z" fill="#dcbfa9"/>
+  </g>
+  <!-- 手の縁にも朝の光 -->
+  <g fill="none" stroke="#fff0da" stroke-width="3" opacity="0.5" filter="url(#hand)">
+    <path d="M318 590 C 334 556, 360 536, 382 540"/>
+    <path d="M882 590 C 866 556, 840 536, 818 540"/>
+  </g>
+
+  <rect width="1200" height="800" filter="url(#grain)" opacity="0.06"/>
+</svg>

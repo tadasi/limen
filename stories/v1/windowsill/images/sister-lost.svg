@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <!-- 冷たく色の抜けた夜明け -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4f5c66"/>
+      <stop offset="0.6" stop-color="#9aa6a4"/>
+      <stop offset="1" stop-color="#c4c9bf"/>
+    </linearGradient>
+    <linearGradient id="street" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6d7474"/>
+      <stop offset="1" stop-color="#3f4446"/>
+    </linearGradient>
+    <radialGradient id="vignette" cx="0.5" cy="0.45" r="0.75">
+      <stop offset="0.45" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.75"/>
+    </radialGradient>
+    <clipPath id="glass"><rect x="200" y="80" width="800" height="560"/></clipPath>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="vague" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="21" result="warp"/>
+      <feDisplacementMap in="SourceGraphic" in2="warp" scale="9" xChannelSelector="R" yChannelSelector="G" result="moved"/>
+      <feGaussianBlur in="moved" stdDeviation="1.4"/>
+    </filter>
+    <filter id="smear" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.12" numOctaves="2" seed="8" result="warp"/>
+      <feDisplacementMap in="SourceGraphic" in2="warp" scale="16" xChannelSelector="R" yChannelSelector="G" result="moved"/>
+      <feGaussianBlur in="moved" stdDeviation="1"/>
+    </filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    <!-- 顔のない、白っぽいカーディガンの澪（足元が原点） -->
+    <g id="mio">
+      <path d="M-10 -40 L -9 0 L -3 0 L -2 -40 Z" fill="#8f928e"/>
+      <path d="M2 -40 L 3 0 L 9 0 L 10 -40 Z" fill="#8f928e"/>
+      <path d="M-20 -96 C -14 -104, 14 -104, 20 -96 C 24 -76, 24 -54, 20 -40 C 8 -36, -8 -36, -20 -40 C -24 -54, -24 -76, -20 -96 Z" fill="#d9dbd4"/>
+      <path d="M-20 -112 C -24 -140, 24 -140, 20 -112 L 22 -94 C 10 -90, -10 -90, -22 -94 Z" fill="#1d1f24"/>
+      <ellipse cx="0" cy="-116" rx="14" ry="17" fill="#eceee8"/>
+    </g>
+  </defs>
+
+  <g>
+    <rect width="1200" height="800" fill="#141318"/>
+    <g clip-path="url(#glass)">
+      <rect x="200" y="80" width="800" height="560" fill="url(#sky)"/>
+      <path d="M200 300 L260 260 L320 300 L320 270 L400 225 L480 270 L480 245 L560 210 L640 245 L640 290 L720 250 L800 290 L800 265 L880 230 L960 265 L1000 250 L1000 520 L200 520 Z" fill="#555c5f"/>
+      <g fill="#3f4548">
+        <rect x="330" y="320" width="44" height="54"/>
+        <rect x="610" y="310" width="48" height="58"/>
+        <rect x="860" y="320" width="44" height="54"/>
+      </g>
+      <rect x="200" y="500" width="800" height="22" fill="#4b5153"/>
+      <rect x="200" y="520" width="800" height="120" fill="url(#street)"/>
+      <path d="M430 300 C 429 400, 430 480, 432 560" stroke="#353a3d" stroke-width="7" fill="none"/>
+    </g>
+  </g>
+
+  <!-- 呼ぶたびに増えた、少しずつ違う澪たち。みな、こちらの窓を見上げている -->
+  <g clip-path="url(#glass)">
+    <use href="#mio" transform="translate(352 372) scale(0.38)" opacity="0.55" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(634 366) scale(0.4)" opacity="0.6" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(882 372) scale(0.38)" opacity="0.5" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(520 246) scale(0.3)" opacity="0.45" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(900 268) scale(0.3)" opacity="0.4" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(290 500) scale(0.55)" opacity="0.7" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(760 500) scale(0.55)" opacity="0.7" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(430 640) scale(0.95)" opacity="0.85" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(600 640) scale(0.9)" opacity="0.8" filter="url(#vague)"/>
+    <use href="#mio" transform="translate(880 650) scale(1.05)" opacity="0.85" filter="url(#vague)"/>
+  </g>
+  <!-- いちばん近い顔は、崩れている -->
+  <g clip-path="url(#glass)" filter="url(#smear)">
+    <ellipse cx="880" cy="528" rx="15" ry="18" fill="#f2f3ee"/>
+  </g>
+
+  <!-- 窓枠 -->
+  <g fill="none" stroke="#18171d">
+    <rect x="190" y="70" width="820" height="580" stroke-width="20"/>
+    <line x1="590" y1="70" x2="590" y2="650" stroke-width="12"/>
+    <line x1="612" y1="70" x2="612" y2="650" stroke-width="12"/>
+  </g>
+  <rect x="120" y="650" width="960" height="40" fill="#26242c"/>
+  <rect x="120" y="650" width="960" height="4" fill="#3a3842"/>
+  <rect x="0" y="690" width="1200" height="110" fill="#111015"/>
+
+  <!-- 窓台の写真立て。写真の顔だけが、白く抜け落ちている -->
+  <g>
+    <path d="M380 660 L 404 598" stroke="#2a2430" stroke-width="6"/>
+    <rect x="300" y="520" width="140" height="140" rx="4" fill="#3f3530"/>
+    <rect x="312" y="532" width="116" height="116" fill="#9e9a92"/>
+    <path d="M330 648 C 334 612, 406 612, 410 648 Z" fill="#c9c6bd"/>
+    <path d="M338 606 C 336 560, 404 560, 402 606 L 404 628 L 336 628 Z" fill="#1c1a20"/>
+  </g>
+  <ellipse cx="370" cy="592" rx="24" ry="28" fill="#fbfbf8"/>
+  <ellipse cx="370" cy="592" rx="34" ry="38" fill="#ffffff" opacity="0.35" filter="url(#soft)"/>
+
+  <rect width="1200" height="800" fill="url(#vignette)"/>
+  <rect width="1200" height="800" filter="url(#grain)" opacity="0.1"/>
+</svg>
