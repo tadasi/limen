@@ -11,8 +11,6 @@
   --illust-ratio: 3 / 2;
   --text-size: 1.0625rem;
   --text-leading: 2;
-  /* 1 場面あたり約 180 字（3 段落）が収まる高さ。場面ごとの文量差で選択肢の位置が揺れないよう確保する */
-  --text-min-height: 13em;
 
   /* 演出の長さ（JS 側の待ち時間は assets/js/main.js の TIMING と揃える） */
   --fade-in: 1400ms;
@@ -312,7 +310,6 @@ body {
 }
 
 .narrative {
-  min-height: var(--text-min-height);
   font-size: var(--text-size);
   line-height: var(--text-leading);
   letter-spacing: 0.04em;
@@ -441,8 +438,6 @@ body {
 @media (max-width: 520px) {
   :root {
     --text-size: 1rem;
-    /* 1 行が短くなるぶん行数が増える */
-    --text-min-height: 19em;
   }
 
   .stage {
