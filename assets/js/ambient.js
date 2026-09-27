@@ -255,23 +255,31 @@
   });
 
   document.addEventListener("visibilitychange", () => {
-    if (!on || !ctx) return;
+    if (!on) return;
     if (document.hidden) pause();
     else play();
   });
 
-  // 再読み込み後もオンを引き継ぐ。ブラウザは操作なしに音を出せないため、最初の操作で鳴らし始める
   const savedVolume = load(VOLUME_KEY);
   if (savedVolume !== null && Number(savedVolume) >= 0 && Number(savedVolume) <= 1) slider.value = savedVolume;
 
+  // 再読み込み後もオンを引き継ぐ。まず鳴らしてみて、ブラウザに止められていたら、
+  // 実際に鳴り始めるまで、クリック・タップ・キー入力のたびに鳴らし直す
+  // （タッチの押し始めや Esc キーは、ブラウザが操作として認めないことがある）
   if (load(STORAGE_KEY) === "on") {
     on = true;
-    const gestures = ["pointerdown", "keydown"];
-    const start = () => {
-      gestures.forEach((type) => document.removeEventListener(type, start, true));
-      if (on && !document.hidden) play();
+    if (!document.hidden) play();
+
+    const gestures = ["pointerdown", "pointerup", "mousedown", "touchend", "click", "keydown"];
+    const stopWaiting = () => gestures.forEach((type) => document.removeEventListener(type, retry, true));
+    const retry = () => {
+      if (!on || (ctx && ctx.state === "running")) {
+        stopWaiting();
+        return;
+      }
+      if (!document.hidden) play();
     };
-    gestures.forEach((type) => document.addEventListener(type, start, true));
+    gestures.forEach((type) => document.addEventListener(type, retry, true));
   }
 
   update();
