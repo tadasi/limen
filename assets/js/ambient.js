@@ -5,6 +5,9 @@
   const MAX_VOLUME = 1;
   const FADE_IN = 1;
   const FADE_OUT = 1.5;
+  // オン/オフと音量は、タブを開いている間だけ覚えておく（新しく開いたときは必ずオフ）
+  const STORAGE_KEY = "limen:sound";
+  const VOLUME_KEY = "limen:volume";
 
   // 1 拍の長さ（秒）。約 43 BPM のゆったりした歩み
   const BEAT = 1.4;
@@ -167,7 +170,7 @@
     };
   }
 
-  // ---- オン/オフ（読み込み時は必ずオフ） ----
+  // ---- オン/オフ ----
 
   const controls = document.querySelector(".sound");
   const button = document.getElementById("sound-toggle");
@@ -213,6 +216,26 @@
     suspendTimer = setTimeout(() => ctx.suspend(), FADE_OUT * 1000 + 200);
   }
 
+  function load(key) {
+    try {
+      return sessionStorage.getItem(key);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function store(key, value) {
+    try {
+      sessionStorage.setItem(key, value);
+    } catch (error) {
+      // 保存できない環境では、読み込みのたびに初期状態から始まるだけ
+    }
+  }
+
+  function save() {
+    store(STORAGE_KEY, on ? "on" : "off");
+  }
+
   function update() {
     button.setAttribute("aria-pressed", String(on));
     button.title = on ? "音楽を止める" : "音楽を流す";
@@ -220,20 +243,36 @@
 
   button.addEventListener("click", () => {
     on = !on;
+    save();
     update();
     if (on) play();
     else pause();
   });
 
   slider.addEventListener("input", () => {
+    store(VOLUME_KEY, slider.value);
     if (on && ctx) ambient.fadeTo(volume(), 0.1);
   });
 
   document.addEventListener("visibilitychange", () => {
-    if (!on) return;
+    if (!on || !ctx) return;
     if (document.hidden) pause();
     else play();
   });
+
+  // 再読み込み後もオンを引き継ぐ。ブラウザは操作なしに音を出せないため、最初の操作で鳴らし始める
+  const savedVolume = load(VOLUME_KEY);
+  if (savedVolume !== null && Number(savedVolume) >= 0 && Number(savedVolume) <= 1) slider.value = savedVolume;
+
+  if (load(STORAGE_KEY) === "on") {
+    on = true;
+    const gestures = ["pointerdown", "keydown"];
+    const start = () => {
+      gestures.forEach((type) => document.removeEventListener(type, start, true));
+      if (on && !document.hidden) play();
+    };
+    gestures.forEach((type) => document.addEventListener(type, start, true));
+  }
 
   update();
 })();
