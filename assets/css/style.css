@@ -158,9 +158,10 @@ body {
   filter: drop-shadow(0 0 6px var(--glow));
 }
 
-/* 音量バー：アイコンの下に現れる */
+/* 音量バー：音楽がオンのとき、ホバーしている間だけアイコンの下に現れ、離れるとゆっくり消える */
 .sound-panel {
   position: absolute;
+  /* アイコンと少し重ねて、ポインタを下へ動かす途中でホバーが切れないようにする */
   top: calc(100% - 4px);
   left: 50%;
   width: 32px;
@@ -174,17 +175,33 @@ body {
   visibility: hidden;
   transform: translate(-50%, -6px);
   transition:
-    opacity 300ms ease,
-    transform 300ms ease,
-    visibility 0s linear 300ms;
+    opacity 1200ms ease,
+    transform 1200ms ease,
+    visibility 0s linear 1200ms;
 }
 
-/* 音楽がオンの間だけ出す */
-.sound:has(.sound-toggle[aria-pressed="true"]) .sound-panel {
+.sound:has(.sound-toggle[aria-pressed="true"]):hover .sound-panel,
+.sound:has(.sound-toggle[aria-pressed="true"]):has(:focus-visible) .sound-panel {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
-  transition-delay: 0s;
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease,
+    visibility 0s;
+}
+
+/* ホバーできない端末（スマホなど）では、オンの間は出したままにする */
+@media (hover: none) {
+  .sound:has(.sound-toggle[aria-pressed="true"]) .sound-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition:
+      opacity 300ms ease,
+      transform 300ms ease,
+      visibility 0s;
+  }
 }
 
 /* 横向きのバーを回転させて縦に置く（上が大きい） */
