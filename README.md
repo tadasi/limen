@@ -80,7 +80,7 @@ LIMEN.registerStory("v1", "windowsill", {
   start: "streetlamp",                   // 最初の場面 ID
   scenes: {
     streetlamp: {
-      image: "images/streetlamp.svg",    // このファイル基準の相対パス
+      image: "images/streetlamp.png",    // このファイル基準の相対パス
       alt: "画像の説明",
       text: ["段落1", "段落2", "段落3"],  // 段落ごとに順にふわっと表示される
       choices: [
