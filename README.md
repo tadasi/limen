@@ -80,7 +80,7 @@ LIMEN.registerStory("v1", "windowsill", {
   start: "streetlamp",                   // 最初の場面 ID
   scenes: {
     streetlamp: {
-      image: "images/streetlamp.png",    // このファイル基準の相対パス
+      image: "images/streetlamp.jpg",    // このファイル基準の相対パス
       alt: "画像の説明",
       text: ["段落1", "段落2", "段落3"],  // 段落ごとに順にふわっと表示される
       choices: [
@@ -88,7 +88,7 @@ LIMEN.registerStory("v1", "windowsill", {
       ],
     },
     "dog-letter": {
-      image: "images/dog-letter.svg",
+      image: "images/dog-letter.jpg",
       alt: "画像の説明",
       text: ["段落1", "段落2", "段落3"],
       ending: true,                      // 結末。choices は書かない
@@ -110,13 +110,14 @@ LIMEN.registerStory("v1", "windowsill", {
 
 - **主人公を足す**：`stories/<version>/<id>/story.js` を作り、`version.js` の `protagonists` に登録する。
 - **バージョンを足す**：`stories/<version>/` に `version.js`・`world.md`・主人公ディレクトリを作り、`stories/index.js` の `versions` に加える。最新にするなら `latest` も更新する。
+- **イラストを入れる**：生成した PNG は重い（1 枚約 2MB）ので、品質 80 の JPEG に変換してから置く。macOS なら `sips -s format jpeg -s formatOptions 80 <名前>.png --out <名前>.jpg` で変換できる（1 枚約 300KB）。
 
 ## レイアウトの目安
 
 | 項目 | 値 | 変数 |
 |---|---|---|
 | 本文の幅 | 最大 720px | `--stage-width` |
-| イラストの比率 | 3:2（推奨 1200×800） | `--illust-ratio` |
+| イラストの比率 | 3:2（現在の絵は 1536×1024 の JPEG） | `--illust-ratio` |
 | 本文の量 | 1 場面あたり約 200〜250 字（収まらない分はスクロール） | — |
 | 選択肢 | 1〜3 個 | — |
 

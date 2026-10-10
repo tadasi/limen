@@ -2,7 +2,7 @@ LIMEN.registerStory("v1", "windowsill", {
   start: "streetlamp",
   scenes: {
     streetlamp: {
-      image: "images/streetlamp.png",
+      image: "images/streetlamp.jpg",
       alt: "寝起きのかすんだ目で見下ろす、月明かりの路地。その先に、白っぽいものがぼんやりと見える",
       text: [
         "午前四時。夜明けにはまだ遠い時刻に目が覚めて、妹の部屋だった二階の窓辺に佇んでいた。",
@@ -18,7 +18,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     sister: {
-      image: "images/sister.png",
+      image: "images/sister.jpg",
       alt: "月明かりの下で、白いブラウスと白いズボンの、短い髪の十八歳ほどの女性がこちらを見上げて手を振っている。輪郭はぼんやりとしている",
       text: [
         "そう思った瞬間、ぼんやりとした白いものが、ゆっくりと人の形を結んだ。",
@@ -34,7 +34,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     "sister-home": {
-      image: "images/sister-home.png",
+      image: "images/sister-home.jpg",
       alt: "朝日が差し込みはじめた路地を、手をつないで歩いていく大人と、白っぽい寝間着の小さな子の後ろ姿",
       text: [
         "階段を駆け下りて、路地に出た。",
@@ -46,7 +46,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     "sister-lost": {
-      image: "images/sister-lost.png",
+      image: "images/sister-lost.jpg",
       alt: "月明かりの路地に、寝間着姿や上着を引っかけただけの近所の人々が棒立ちで並び、みな首をかしげて開け放った窓を見上げている。どの顔も少しずつ違う澪の顔をしている",
       text: [
         "「澪？　本当に、澪なの？」",
@@ -59,7 +59,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     dog: {
-      image: "images/dog.png",
+      image: "images/dog.jpg",
       alt: "月明かりの路地に座った白い犬が、封筒をくわえて窓を見上げている",
       text: [
         "そう思った瞬間、白いものはぶるりと身を震わせて、犬の姿を露わにした。",
@@ -74,7 +74,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     "dog-letter": {
-      image: "images/dog-letter.png",
+      image: "images/dog-letter.jpg",
       alt: "夜明けの光の中で両手に持ったエアメールの封筒。中央に日本語の宛名、外国の切手が貼られているが、差出人の住所はところどころ滲んで読めない",
       text: [
         "サンダルをつっかけて外に出ると、犬は封筒をそっと足元に置いた。",
@@ -87,7 +87,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     "dog-gone": {
-      image: "images/dog-gone.png",
+      image: "images/dog-gone.jpg",
       alt: "夜明け、隣の自分の部屋の窓から見下ろす路地。犬の姿はどこにもない",
       text: [
         "カーテンを引いて、隣の自分の部屋に戻った。",
@@ -100,7 +100,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     fog: {
-      image: "images/fog.png",
+      image: "images/fog.jpg",
       alt: "夜の路地に霧が広がり、月明かりがにじんで、向かいの家並みが溶けていく",
       text: [
         "そう思った瞬間、白いものは音もなくほどけて、霧になった。",
@@ -115,7 +115,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     "fog-closed": {
-      image: "images/fog-closed.png",
+      image: "images/fog-closed.jpg",
       alt: "朝の光が差し込む部屋。本棚と壁のカレンダーはそのままで、窓の外だけが一面白い",
       text: [
         "窓を閉めて、鍵をかけた。",
@@ -127,7 +127,7 @@ LIMEN.registerStory("v1", "windowsill", {
     },
 
     "fog-empty": {
-      image: "images/fog-empty.png",
+      image: "images/fog-empty.jpg",
       alt: "朝の光の中の、がらんとした空き部屋。壁には額やカレンダーを外した跡だけが白く残っている",
       text: [
         "窓を大きく開けると、霧は待ちかねたように部屋の中へ流れ込んできた。",
