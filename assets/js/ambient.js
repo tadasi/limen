@@ -184,6 +184,9 @@
   let ctx = null;
   let ambient = null;
   let on = false;
+  // 再読み込みでオンを引き継いだものの、ブラウザの自動再生の制限でまだ鳴らせていない間は true。
+  // この間はアイコンをオフの見た目にして、表示と実際の音を食い違わせない
+  let waiting = false;
   let scheduler = null;
   let suspendTimer = null;
 
@@ -193,19 +196,32 @@
     return MAX_VOLUME * level * level;
   }
 
+  // 鳴らせない間に音を予約すると、ブラウザが警告を出し続けるので、動き出してから予約する
+  function tick() {
+    if (ctx.state === "running") ambient.schedule(ctx.currentTime + 4);
+  }
+
   function play() {
     if (!ctx) {
       ctx = new AudioContextClass();
       ambient = createAmbient(ctx);
       ambient.output.connect(ctx.destination);
       ambient.start(ctx.currentTime);
+      ctx.addEventListener("statechange", () => {
+        if (ctx.state !== "running") return;
+        if (waiting) {
+          waiting = false;
+          update();
+        }
+        if (on) tick();
+      });
     }
     clearTimeout(suspendTimer);
     ctx.resume().catch((error) => console.error("limen: 音楽を再生できません", error));
     ambient.fadeTo(volume(), FADE_IN);
     clearInterval(scheduler);
-    scheduler = setInterval(() => ambient.schedule(ctx.currentTime + 4), 1000);
-    ambient.schedule(ctx.currentTime + 4);
+    scheduler = setInterval(tick, 1000);
+    tick();
   }
 
   function pause() {
@@ -237,12 +253,15 @@
   }
 
   function update() {
-    button.setAttribute("aria-pressed", String(on));
-    button.title = on ? "音楽を止める" : "音楽を流す";
+    const sounding = on && !waiting;
+    button.setAttribute("aria-pressed", String(sounding));
+    button.title = sounding ? "音楽を止める" : "音楽を流す";
   }
 
   button.addEventListener("click", () => {
-    on = !on;
+    // まだ鳴らせていない間に押されたら、オフの見た目に合わせて、止めずに鳴らす
+    on = waiting || !on;
+    waiting = false;
     save();
     update();
     if (on) play();
@@ -263,20 +282,25 @@
   const savedVolume = load(VOLUME_KEY);
   if (savedVolume !== null && Number(savedVolume) >= 0 && Number(savedVolume) <= 1) slider.value = savedVolume;
 
-  // 再読み込み後もオンを引き継ぐ。まず鳴らしてみて、ブラウザに止められていたら、
+  // 再読み込み後もオンを引き継ぐ。ブラウザは、再読み込みしたページが操作を待たずに
+  // 音を鳴らすことを許さないことが多い。まず鳴らしてみて、止められていたら、
   // 実際に鳴り始めるまで、クリック・タップ・キー入力のたびに鳴らし直す
   // （タッチの押し始めや Esc キーは、ブラウザが操作として認めないことがある）
   if (load(STORAGE_KEY) === "on") {
     on = true;
+    waiting = true;
     if (!document.hidden) play();
+    if (ctx && ctx.state === "running") waiting = false;
 
     const gestures = ["pointerdown", "pointerup", "mousedown", "touchend", "click", "keydown"];
     const stopWaiting = () => gestures.forEach((type) => document.removeEventListener(type, retry, true));
-    const retry = () => {
-      if (!on || (ctx && ctx.state === "running")) {
+    const retry = (event) => {
+      if (!waiting) {
         stopWaiting();
         return;
       }
+      // スピーカーのボタンは、押したときの処理で鳴らす（ここで鳴らすと、続く click でオフに切り替わってしまう）
+      if (event.target instanceof Element && event.target.closest("#sound-toggle")) return;
       if (!document.hidden) play();
     };
     gestures.forEach((type) => document.addEventListener(type, retry, true));
