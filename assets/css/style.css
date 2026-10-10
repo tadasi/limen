@@ -178,20 +178,9 @@ body {
     visibility 0s linear 1200ms;
 }
 
-.sound:has(.sound-toggle[aria-pressed="true"]):hover .sound-panel,
-.sound:has(.sound-toggle[aria-pressed="true"]):has(:focus-visible) .sound-panel {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, 0);
-  transition:
-    opacity 300ms ease,
-    transform 300ms ease,
-    visibility 0s;
-}
-
-/* ホバーできない端末（スマホなど）では、オンの間は出したままにする */
-@media (hover: none) {
-  .sound:has(.sound-toggle[aria-pressed="true"]) .sound-panel {
+/* スマホなどではタップしたあとも :hover が残るので、ホバーで出すのはマウスのある端末に限る */
+@media (hover: hover) {
+  .sound:has(.sound-toggle[aria-pressed="true"]):hover .sound-panel {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0);
@@ -200,6 +189,18 @@ body {
       transform 300ms ease,
       visibility 0s;
   }
+}
+
+/* ホバーできない端末（スマホなど）では、オンにした直後と、バーを触っている間だけ出す（.is-open は ambient.js が付け外しする） */
+.sound:has(.sound-toggle[aria-pressed="true"]):has(:focus-visible) .sound-panel,
+.sound.is-open:has(.sound-toggle[aria-pressed="true"]) .sound-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease,
+    visibility 0s;
 }
 
 /* 横向きのバーを回転させて縦に置く（上が大きい） */
@@ -214,6 +215,8 @@ body {
   margin: 0;
   background: none;
   cursor: pointer;
+  /* 縦に回転させているので、指を縦に動かしてもページのスクロールに取られないようにする */
+  touch-action: none;
   transform: translate(-50%, -50%) rotate(-90deg);
 }
 

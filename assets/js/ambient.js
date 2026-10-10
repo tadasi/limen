@@ -8,6 +8,8 @@
   // オン/オフと音量は、タブを開いている間だけ覚えておく（新しく開いたときは必ずオフ）
   const STORAGE_KEY = "limen:sound";
   const VOLUME_KEY = "limen:volume";
+  // スマホなどで、最後に触れてから音量バーを消し始めるまでの時間（ミリ秒）
+  const PANEL_HIDE_DELAY = 3000;
 
   // 1 拍の長さ（秒）。約 43 BPM のゆったりした歩み
   const BEAT = 1.4;
@@ -258,17 +260,49 @@
     button.title = sounding ? "音楽を止める" : "音楽を流す";
   }
 
+  // ホバーできない端末（スマホなど）では、オンにした直後だけ音量バーを出し、しばらく触れなければ消す
+  const touchOnly = window.matchMedia("(hover: none)");
+  let panelTimer = null;
+
+  function openPanel() {
+    controls.classList.add("is-open");
+    clearTimeout(panelTimer);
+  }
+
+  function closePanelLater() {
+    clearTimeout(panelTimer);
+    panelTimer = setTimeout(() => controls.classList.remove("is-open"), PANEL_HIDE_DELAY);
+  }
+
   button.addEventListener("click", () => {
     // まだ鳴らせていない間に押されたら、オフの見た目に合わせて、止めずに鳴らす
     on = waiting || !on;
     waiting = false;
     save();
     update();
+    if (on && touchOnly.matches) {
+      openPanel();
+      closePanelLater();
+    } else {
+      clearTimeout(panelTimer);
+      controls.classList.remove("is-open");
+    }
     if (on) play();
     else pause();
   });
 
+  // バーを触っている間は出したままにして、指を離してから消し始める
+  slider.addEventListener("pointerdown", () => {
+    if (controls.classList.contains("is-open")) openPanel();
+  });
+  ["pointerup", "pointercancel", "change"].forEach((type) => {
+    slider.addEventListener(type, () => {
+      if (controls.classList.contains("is-open")) closePanelLater();
+    });
+  });
+
   slider.addEventListener("input", () => {
+    if (controls.classList.contains("is-open")) openPanel();
     store(VOLUME_KEY, slider.value);
     if (on && ctx) ambient.fadeTo(volume(), 0.1);
   });
