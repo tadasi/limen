@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- ほぼ閉まった夜の窓。右端の細い隙間から、白い光が差している -->
+  <rect width="64" height="64" rx="14" fill="#07070b"/>
+  <rect x="17" y="11" width="30" height="42" rx="1.5" fill="none" stroke="#d9d4cc" stroke-opacity="0.5" stroke-width="2.5"/>
+  <line x1="32" y1="12.5" x2="32" y2="51.5" stroke="#d9d4cc" stroke-opacity="0.3" stroke-width="1.5"/>
+  <rect x="40.5" y="13.5" width="3.5" height="37" fill="#eef1f6"/>
+</svg>

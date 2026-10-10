@@ -370,6 +370,30 @@ body {
   outline-offset: 3px;
 }
 
+/* 結末でだけ出る、X へのシェア。選択肢より控えめにする */
+.share {
+  align-self: flex-end;
+  margin-top: 4px;
+  padding: 0.4em 0.2em;
+  color: var(--ink-dim);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.share:hover,
+.share:focus-visible {
+  color: var(--ink);
+  border-bottom-color: var(--line-strong);
+  outline: none;
+}
+
+.share:focus-visible {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 3px;
+}
+
 /* ---- ふわっと現れる演出 ---- */
 
 .fx {

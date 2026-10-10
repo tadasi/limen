@@ -13,6 +13,8 @@
 
   const STORIES_ROOT = "stories/";
   const ENDING_CHOICE_LABEL = "もう一度、目を閉じる";
+  const SHARE_LABEL = "X でシェアする";
+  const SHARE_INTENT = "https://x.com/intent/post";
 
   // ---- 物語データの登録口（stories/ 以下の JS から呼ばれる） ----
 
@@ -162,6 +164,15 @@
     return items[Math.floor(Math.random() * items.length)];
   }
 
+  // 結末にたどり着いたときの、X への投稿画面の URL。結末の種類や中身は文面に出さない
+  function shareLink(version, protagonist) {
+    const params = new URLSearchParams({
+      text: `limen「${version.title}」で、${protagonist.name}の夢の終わりにたどり着いた。`,
+      url: `${location.origin}${location.pathname}`,
+    });
+    return `${SHARE_INTENT}?${params}`;
+  }
+
   async function resolveView(route) {
     await loadScript(`${STORIES_ROOT}index.js`);
     const catalog = registry.catalog;
@@ -189,6 +200,7 @@
         alt: scene.alt,
         text: scene.text,
         choices,
+        share: scene.ending ? shareLink(version, protagonist) : null,
       },
       preload: (scene.choices || [])
         .map((choice) => story.scenes[choice.next])
@@ -258,7 +270,20 @@
       choices.append(button);
     });
 
-    return choicesStart + Math.max(view.choices.length - 1, 0) * TIMING.choiceStagger + TIMING.fadeIn;
+    let items = view.choices.length;
+    if (view.share) {
+      const link = document.createElement("a");
+      link.className = "share fx";
+      link.href = view.share;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = SHARE_LABEL;
+      link.style.setProperty("--delay", `${choicesStart + items * TIMING.choiceStagger}ms`);
+      choices.append(link);
+      items += 1;
+    }
+
+    return choicesStart + Math.max(items - 1, 0) * TIMING.choiceStagger + TIMING.fadeIn;
   }
 
   function errorView(error) {
@@ -340,7 +365,7 @@
 
     const index = Number(event.key) - 1;
     if (Number.isInteger(index) && index >= 0) {
-      const button = choices.children[index];
+      const button = choices.querySelectorAll(".choice")[index];
       if (button) button.click();
     }
   });
