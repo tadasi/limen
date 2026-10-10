@@ -296,6 +296,8 @@
     markSub.textContent = resolved.version ? resolved.version.title : "";
     document.title = resolved.version ? `limen — ${resolved.version.title}` : "limen";
 
+    // 前の場面を下までスクロールして選んでも、次の場面は先頭から読み始められるようにする
+    window.scrollTo(0, 0);
     const total = build(resolved.view);
     // 初期状態（非表示）を確定させてからトランジションを開始する
     void stage.offsetWidth;
