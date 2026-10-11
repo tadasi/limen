@@ -167,7 +167,7 @@
   // 結末にたどり着いたときの、X への投稿画面の URL。結末の種類や中身は文面に出さない
   function shareLink(version, protagonist) {
     const params = new URLSearchParams({
-      text: `limen「${version.title}」で、${protagonist.name}の夢の終わりにたどり着いた。`,
+      text: `limen「${version.title}」の世界で、${protagonist.name}の夢の終わりにたどり着いた。この世界で、あなたの心に浮かんだ像はなんだった？→`,
       url: `${location.origin}${location.pathname}`,
     });
     return `${SHARE_INTENT}?${params}`;
