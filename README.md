@@ -68,7 +68,7 @@ LIMEN.catalog({
 
 ```js
 LIMEN.registerVersion("v1", {
-  title: "見立て",                       // ヘッダーとページタイトルに出る
+  title: "イマージュ",                     // ヘッダーとページタイトルに出る
   protagonists: [                        // この中からランダムに一人が選ばれる
     { id: "windowsill", name: "窓辺の人" },
   ],

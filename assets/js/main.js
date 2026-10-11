@@ -319,7 +319,7 @@
     if (location.hash) history.replaceState(null, "", `${location.pathname}${location.search}`);
 
     markSub.textContent = resolved.version ? resolved.version.title : "";
-    document.title = resolved.version ? `limen — ${resolved.version.title}` : "limen";
+    document.title = resolved.version ? `limen - ${resolved.version.title}` : "limen";
 
     // 前の場面を下までスクロールして選んでも、次の場面は先頭から読み始められるようにする
     window.scrollTo(0, 0);
